@@ -52,12 +52,6 @@ int main(void)
 	HT_API_ConfigRegion(RCZ2);
 	while (1)
 	{
-		/*
-		 *
-		 * Wait for an external interrupt on the user button PA6.
-		 * More information about the algorithm can be found in the function HT_GPIO_UserButtonHandler located in Core/Src/gpio.c.
-		 *
-		 * */
 
 	}
 }

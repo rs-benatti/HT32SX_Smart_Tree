@@ -98,9 +98,6 @@ void MX_GPIO_Init(void)
   HAL_NVIC_SetPriority(EXTI2_3_IRQn, 0, 0);
   HAL_NVIC_EnableIRQ(EXTI2_3_IRQn);
 
-  HAL_NVIC_SetPriority(EXTI4_15_IRQn, 2, 0);
-  HAL_NVIC_EnableIRQ(EXTI4_15_IRQn);
-
 }
 
 /* USER CODE BEGIN 2 */
@@ -319,9 +316,6 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin) {
 		} else {
 			ST_RF_API_S2LP_IRQ_CB(); //If the CBPSK is implemented trigger TX State Machine
 		}
-	} else if(GPIO_Pin == USER_BUTTON_Pin) {
-		HAL_NVIC_DisableIRQ(EXTI4_15_IRQn);
-		HT_GPIO_UserButtonHandler();
 	}
 
 }
