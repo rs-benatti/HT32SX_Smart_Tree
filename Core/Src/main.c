@@ -40,7 +40,6 @@ int main(void)
   MX_RTC_Init();
   MX_SPI1_Init();
   MX_USART1_UART_Init();
-  MX_ADC_Init();
   MX_TIM2_Init();
   MX_TIM21_Init();
 
