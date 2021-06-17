@@ -1,8 +1,8 @@
 /**
   ******************************************************************************
   * File Name          : gpio.h
-  * Description        : This file contains all the functions prototypes for 
-  *                      the gpio  
+  * Description        : This file contains all the functions prototypes for
+  *                      the gpio
   ******************************************************************************
   * @attention
   *
@@ -46,6 +46,8 @@ extern uint8_t S2LPShutdownCheck(void);
 extern void S2LPIRQInit(void);
 extern void S2LPIRQEnable(uint8_t state, uint8_t edge_direction);
 extern void S2LPShutdownInit(void);
+extern void Set_Pin_Output(GPIO_TypeDef *PORT, uint32_t PIN);
+extern void Set_Pin_Input(GPIO_TypeDef *PORT, uint32_t PIN);
 
 extern void setLowPowerFlag(uint8_t lowPower);
 extern uint8_t getLowPowerFlag(void);

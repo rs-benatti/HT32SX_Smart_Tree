@@ -36,9 +36,9 @@ uint8_t user_button = 0;
 
 /* USER CODE END 1 */
 
-/** Configure pins as 
-        * Analog 
-        * Input 
+/** Configure pins as
+        * Analog
+        * Input
         * Output
         * EVENT_OUT
         * EXTI
@@ -97,6 +97,9 @@ void MX_GPIO_Init(void)
   /* EXTI interrupt init*/
   HAL_NVIC_SetPriority(EXTI2_3_IRQn, 0, 0);
   HAL_NVIC_EnableIRQ(EXTI2_3_IRQn);
+
+  HAL_NVIC_SetPriority(EXTI4_15_IRQn, 2, 0);
+  HAL_NVIC_EnableIRQ(EXTI4_15_IRQn);
 
 }
 
@@ -326,6 +329,26 @@ void setS2lpIrqRaisedFlag(uint8_t s2lpIrqRaised) {
 
 uint8_t getS2lpIrqRaisedFlag(void) {
 	return s2lp_irq_raised;
+}
+
+void Set_Pin_Output(GPIO_TypeDef *PORT, uint32_t PIN){
+	GPIO_InitTypeDef GPIO_InitStruct = {0};
+	HAL_GPIO_WritePin(PORT, PIN, GPIO_PIN_RESET);
+	GPIO_InitStruct.Pin = PIN;
+	GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+	GPIO_InitStruct.Pull = GPIO_NOPULL;
+	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
+	HAL_GPIO_Init(PORT, &GPIO_InitStruct);
+}
+
+void Set_Pin_Input(GPIO_TypeDef *PORT, uint32_t PIN){
+	GPIO_InitTypeDef GPIO_InitStruct = {0};
+	HAL_GPIO_WritePin(PORT, PIN, GPIO_PIN_RESET);
+	GPIO_InitStruct.Pin = PIN;
+	GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+	GPIO_InitStruct.Pull = GPIO_NOPULL;
+	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
+	HAL_GPIO_Init(PORT, &GPIO_InitStruct);
 }
 
 /* USER CODE END 2 */

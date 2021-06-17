@@ -32,7 +32,7 @@ void MX_ADC_Init(void)
 {
   ADC_ChannelConfTypeDef sConfig = {0};
 
-  /** Configure the global features of the ADC (Clock, Resolution, Data Alignment and number of conversion) 
+  /** Configure the global features of the ADC (Clock, Resolution, Data Alignment and number of conversion)
   */
   hadc.Instance = ADC1;
   hadc.Init.OversamplingMode = DISABLE;
@@ -55,7 +55,7 @@ void MX_ADC_Init(void)
   {
     Error_Handler();
   }
-  /** Configure for the selected ADC regular channel to be converted. 
+  /** Configure for the selected ADC regular channel to be converted.
   */
   sConfig.Channel = ADC_CHANNEL_TEMPSENSOR;
   sConfig.Rank = ADC_RANK_CHANNEL_NUMBER;
@@ -63,7 +63,7 @@ void MX_ADC_Init(void)
   {
     Error_Handler();
   }
-  /** Configure for the selected ADC regular channel to be converted. 
+  /** Configure for the selected ADC regular channel to be converted.
   */
   sConfig.Channel = ADC_CHANNEL_VREFINT;
   if (HAL_ADC_ConfigChannel(&hadc, &sConfig) != HAL_OK)
@@ -110,7 +110,7 @@ void HAL_ADC_MspDeInit(ADC_HandleTypeDef* adcHandle)
 
   /* USER CODE END ADC1_MspDeInit 1 */
   }
-} 
+}
 
 /* USER CODE BEGIN 1 */
 
