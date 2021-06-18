@@ -110,13 +110,9 @@ int main(void)
   MX_TIM2_Init();
   MX_TIM21_Init();
   MX_TIM6_Init();
-  /* USER CODE BEGIN 2 */
+
   HAL_TIM_Base_Start(&htim6);
 
-  /* USER CODE END 2 */
-
-  /* Infinite loop */
-  /* USER CODE BEGIN WHILE */
   while (1)
   {
 	  DS18B20_Start ();
@@ -138,7 +134,6 @@ int main(void)
 	  Temperature = (int)TEMP;
 	  printf("%d x 10^-1", Temperature);
   }
-  /* USER CODE END 3 */
 }
 
 /**
@@ -187,20 +182,13 @@ void SystemClock_Config(void)
   }
 }
 
-/* USER CODE BEGIN 4 */
-
-/* USER CODE END 4 */
-
 /**
   * @brief  This function is executed in case of error occurrence.
   * @retval None
   */
 void Error_Handler(void)
 {
-  /* USER CODE BEGIN Error_Handler_Debug */
-	/* User can add his own implementation to report the HAL error return state */
-
-  /* USER CODE END Error_Handler_Debug */
+/* User can add his own implementation to report the HAL error return state */
 }
 
 #ifdef  USE_FULL_ASSERT
