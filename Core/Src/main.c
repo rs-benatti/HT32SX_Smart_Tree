@@ -41,6 +41,11 @@
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
 /* USER CODE END PD */
+#ifdef DOWNLINK_FLAG
+static uint8_t downlink_request = 1;
+#else
+static uint8_t downlink_request = 0;
+#endif
 
 /* Private macro -------------------------------------------------------------*/
 /* USER CODE BEGIN PM */
@@ -55,6 +60,7 @@
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
+void ST_Init(void);
 void SystemClock_Config(void);
 void delay(uint32_t us);
 uint8_t DS18B20_Start(void);
@@ -112,6 +118,13 @@ int main(void)
   MX_TIM6_Init();
 
   HAL_TIM_Base_Start(&htim6);
+
+  mcuConfig();
+
+  	/********** OPEN AND CONFIFIGURES SIGFOX LIBRARY IN RCZ2 *********************/
+  	/********** IN ORDER TO OPEN OTHER RCZS, SEE SIGFOX_API.h **/
+  	/********** BASICALLY CHANGES TO OTHER RC VALUE LIKE RCZ3 **/
+  HT_API_ConfigRegion(RCZ2);
 
   while (1)
   {
@@ -182,6 +195,199 @@ void SystemClock_Config(void)
   }
 }
 
+void HT_API_setSmpsVoltageAction(sfx_u8 mode) {
+	ST_RF_API_smps(mode);
+	printf("Set_smps_voltage %d\n", mode);
+}
+
+void HT_API_switchPa(uint8_t state) {
+
+	ST_RF_API_set_pa(state);
+
+	printf("Switch PA: %d\n", state);
+}
+
+void HT_API_ConfigRegion(rc_mask RCZ) {
+	ST_SFX_ERR open_err = ST_SFX_ERR_NONE;
+
+	switch(RCZ){
+	case RCZ1:
+		ST_RF_API_reduce_output_power(RCZ1_OUTPUT_POWER);
+		open_err = St_Sigfox_Open_RCZ(RCZ1);
+		HT_API_switchPa(0);
+		HT_API_setSmpsVoltageAction(7);
+
+		if(open_err != 0)
+			printf("Open rcz error: %X\n", open_err);
+
+		break;
+	case RCZ2:
+		ST_RF_API_reduce_output_power(RCZ2_OUTPUT_POWER);
+		open_err = St_Sigfox_Open_RCZ(RCZ2);
+		HT_API_switchPa(1);
+		HT_API_setSmpsVoltageAction(2);
+
+		if(open_err != 0)
+			printf("Open rcz error: %X\n", open_err);
+
+		break;
+	case RCZ3:
+		open_err = St_Sigfox_Open_RCZ(RCZ3);
+		ST_RF_API_reduce_output_power(RCZ3_OUTPUT_POWER);
+		HT_API_switchPa(0);
+		HT_API_setSmpsVoltageAction(7);
+
+		if(open_err != 0)
+			printf("Open rcz error: %X\n", open_err);
+
+		break;
+	case RCZ4:
+		open_err = St_Sigfox_Open_RCZ(RCZ4);
+		ST_RF_API_reduce_output_power(RCZ4_OUTPUT_POWER);
+		HT_API_switchPa(1);
+		HT_API_setSmpsVoltageAction(2);
+
+		if(open_err != 0)
+			printf("Open rcz error: %X\n", open_err);
+
+		break;
+	case RCZ5:
+		open_err = St_Sigfox_Open_RCZ(RCZ5);
+		ST_RF_API_reduce_output_power(RCZ5_OUTPUT_POWER);
+		HT_API_switchPa(0);
+		HT_API_setSmpsVoltageAction(7);
+
+		if(open_err != 0)
+			printf("Open rcz error: %X\n", open_err);
+
+		break;
+	case RCZ6:
+		open_err = St_Sigfox_Open_RCZ(RCZ6);
+		ST_RF_API_reduce_output_power(RCZ6_OUTPUT_POWER);
+		HT_API_switchPa(0);
+		HT_API_setSmpsVoltageAction(7);
+
+		if(open_err != 0)
+			printf("Open rcz error: %X\n", open_err);
+
+		break;
+	case RCZ7:
+		open_err = St_Sigfox_Open_RCZ(RCZ7);
+		ST_RF_API_reduce_output_power(RCZ7_OUTPUT_POWER);
+		HT_API_switchPa(0);
+		HT_API_setSmpsVoltageAction(7);
+
+		if(open_err != 0)
+			printf("Open rcz error: %X\n", open_err);
+
+		break;
+	default:
+		break;
+	}
+
+}
+
+sfx_error_t HT_API_SendFrame(void) {
+
+	/********** SEND MESSAGE TO RCZ2 ****************************/
+
+	uint8_t customer_data[12]={0xAA, 0xAA, 0xAA, 0xAA, 0xBA, 0xBA, 0xBA, 0xBA, 0xBA, 0xBA, 0xBA, 0xBA};
+	uint8_t customer_resp[8];
+	sfx_error_t err;
+
+#ifdef DOWNLINK_FLAG
+	HAL_TIM_Base_Start_IT(&htim21);
+#endif
+
+	/********** FUNCTION PARAMETERS  ****************************/
+	/********** THE LAST ONE IS TO REQUEST DOWNLINK ************/
+	/********** 1 - YES, 0 - NO	 ******************************/
+
+	err=SIGFOX_API_send_frame(customer_data,sizeof(customer_data),customer_resp, 3, downlink_request);
+
+	if(downlink_request && !err) {
+		printf("Customer resp: {");
+
+		for(uint16_t i = 0; i < 7; i++)
+			printf("0x%x,", customer_resp[i]);
+
+		printf("0x%x}\n\r", customer_resp[7]);
+	}
+
+	printf("\nError Send Frame: %X\n", err);
+
+#ifdef DOWNLINK_FLAG
+	HAL_TIM_Base_Stop_IT(&htim21);
+#endif
+
+	return err;
+}
+
+void mcuConfig(void) {
+	ST_SFX_ERR stSfxRetErr;
+
+	ST_Init();
+
+	NVM_BoardDataType sfxConfiguration;
+	stSfxRetErr = ST_Sigfox_Init(&sfxConfiguration, 0);
+
+	if(stSfxRetErr != ST_SFX_ERR_NONE) {
+		if(stSfxRetErr == ST_SFX_ERR_CREDENTIALS) {
+			sfxConfiguration.id = 0;
+			memset(sfxConfiguration.pac, 0x00, 8);
+			sfxConfiguration.rcz = 0;
+
+		}
+	}
+
+	/* Calibrate RTC in case of STM32*/
+	ST_MCU_API_TimerCalibration(500);
+
+	printf("Sigfox iMCP HT32SX\n");
+
+	printf("ID: %.8X - PAC: ", (unsigned int)sfxConfiguration.id);
+
+	for(uint16_t i = 0; i < sizeof(sfxConfiguration.pac); i++)
+	{
+		printf("%.2X", sfxConfiguration.pac[i]);
+	}
+
+	printf("\n");
+
+	/*			SET S2LP XTAL FREQUENCY														*/
+	/*			DO NOT CHANGE IT																	*/
+
+	ST_RF_API_set_xtal_freq(50000000);
+
+	/*			SET A PROPER FREQUENCY OFFSET											*/
+	/*			THIS VALUE CAN BE FOUND IN CREDENTIALS 						*/
+
+	ST_RF_API_set_freq_offset(sfxConfiguration.freqOffset);
+	printf("Freq Offset %ld \n", (int32_t)sfxConfiguration.freqOffset);
+
+	/*			SET LBT OFFSET																		*/
+	/*			THIS VALUE CAN BE FOUND IN CREDENTIALS 						*/
+
+	ST_RF_API_set_lbt_thr_offset(sfxConfiguration.lbtOffset);
+	printf("LBT %ld \n", (int32_t)sfxConfiguration.lbtOffset);
+
+	/*			SET RSSI OFFSET																		*/
+	/*			THIS VALUE CAN BE FOUND IN CREDENTIALS 						*/
+
+	ST_RF_API_set_rssi_offset(sfxConfiguration.rssiOffset);
+	printf("RSSI %ld \n", sfxConfiguration.rssiOffset);
+}
+
+void ST_Init(void) {
+	/* Put the radio off */
+	S2LPShutdownInit();
+	HAL_Delay(10);
+	S2LPShutdownExit();
+
+	/* FEM Initialization */
+	FEM_Init();
+}
+
 /**
   * @brief  This function is executed in case of error occurrence.
   * @retval None
@@ -232,7 +438,7 @@ uint8_t DS18B20_Start (void)
 	return Response;
 }
 
-void DS18B20_Write (uint8_t data)
+void DS18B20_Write(uint8_t data)
 {
 	Set_Pin_Output(DS18B20_PORT, DS18B20_PIN);  // set as output
 
