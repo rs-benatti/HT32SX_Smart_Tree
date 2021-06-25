@@ -51,6 +51,13 @@ static uint8_t downlink_request = 0;
 /* USER CODE BEGIN PM */
 #define DS18B20_PORT GPIOB
 #define DS18B20_PIN GPIO_PIN_10 /* PB10 */
+
+//#define SigFox_ON
+
+#define DS18B20_ON
+
+//#define LM35_ON
+
 /* USER CODE END PM */
 
 /* Private variables ---------------------------------------------------------*/
@@ -68,8 +75,9 @@ uint8_t DS18B20_Read(void);
 void DS18B20_Write (uint8_t data);
 uint8_t temp_byte1;
 uint8_t temp_byte2;
-uint16_t TEMP;
+float TEMP;
 uint16_t Temperature;
+sfx_u8 customer_data[3];
 
 /* USER CODE BEGIN PFP */
 
@@ -124,17 +132,24 @@ int main(void)
   	/********** OPEN AND CONFIFIGURES SIGFOX LIBRARY IN RCZ2 *********************/
   	/********** IN ORDER TO OPEN OTHER RCZS, SEE SIGFOX_API.h **/
   	/********** BASICALLY CHANGES TO OTHER RC VALUE LIKE RCZ3 **/
+#ifdef SigFox_ON
   HT_API_ConfigRegion(RCZ2);
+#endif
+
+  printf("Comece a cronometrar 10seg");
+  delay(10000);
+  printf("Fim dos 10 segundos");
 
   while (1)
   {
-	  DS18B20_Start ();
+#ifdef DS18B20_ON
+	  DS18B20_Start();
 	  HAL_Delay (1);
 	  DS18B20_Write (0xCC);  // skip ROM
 	  DS18B20_Write (0x44);  // convert t
 	  HAL_Delay (800);
 
-	  DS18B20_Start ();
+	  DS18B20_Start();
 	  HAL_Delay(1);
 	  DS18B20_Write (0xCC);  // skip ROM
 	  DS18B20_Write (0xBE);  // Read Scratch-pad
@@ -142,10 +157,23 @@ int main(void)
 	  temp_byte1 = DS18B20_Read();
 	  temp_byte2 = DS18B20_Read();
 	  TEMP = (temp_byte2<<8)|temp_byte1;
-	  TEMP = TEMP/16;
+	  TEMP = TEMP/16.0;
 	  TEMP = TEMP * 10;
 	  Temperature = (int)TEMP;
 	  printf("%d x 10^-1", Temperature);
+	  printf("\n");
+#endif
+
+#ifdef LM35_ON
+
+#endif
+
+#ifdef SigFox_ON
+	  customer_data[0] = (int)(Temperature / 100);
+	  customer_data[1] = (int)(Temperature / 10);
+	  customer_data[2] = (int)(Temperature % 10);
+	  HT_API_SendFrame();
+#endif
   }
 }
 
@@ -290,8 +318,6 @@ void HT_API_ConfigRegion(rc_mask RCZ) {
 sfx_error_t HT_API_SendFrame(void) {
 
 	/********** SEND MESSAGE TO RCZ2 ****************************/
-
-	uint8_t customer_data[12]={0xAA, 0xAA, 0xAA, 0xAA, 0xBA, 0xBA, 0xBA, 0xBA, 0xBA, 0xBA, 0xBA, 0xBA};
 	uint8_t customer_resp[8];
 	sfx_error_t err;
 
@@ -414,7 +440,7 @@ void assert_failed(uint8_t *file, uint32_t line)
 }
 #endif /* USE_FULL_ASSERT */
 
-void delay (uint32_t us)
+void delay(uint32_t us)
 {
     __HAL_TIM_SET_COUNTER(&htim6,0);
     while ((__HAL_TIM_GET_COUNTER(&htim6))<us);
