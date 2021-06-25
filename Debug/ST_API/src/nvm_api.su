@@ -1,0 +1,11 @@
+nvm_api.c:95:10:GetNVMType	0	static
+nvm_api.c:100:10:GetNVMBoardDataAddress	0	static
+nvm_api.c:105:10:GetNVMSigfoxDataAddress	0	static
+nvm_api.c:110:16:NVM_Read	8	static
+nvm_api.c:123:16:NVM_Write	8	static
+nvm_api.c:58:23:_writeRecordInternal	24	static
+nvm_api.c:136:16:NVM_ReadRecord	40	static
+nvm_api.c:190:6:eraseAllSector	16	static
+nvm_api.c:199:16:NVM_WriteRecord	32	static
+nvm_api.c:73:6:SetNVMInitial	16	static
+nvm_api.c:238:16:NVM_UpdateOffset	88	static

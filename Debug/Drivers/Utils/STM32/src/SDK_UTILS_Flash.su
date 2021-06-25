@@ -1,0 +1,5 @@
+SDK_UTILS_Flash.c:103:22:FlashRead	56	static
+SDK_UTILS_Flash.c:205:22:DataEepromErase	8	static
+SDK_UTILS_Flash.c:227:22:FlashErase	8	static
+SDK_UTILS_Flash.c:143:22:FlashWrite	32	static
+SDK_UTILS_Flash.c:261:22:CheckFlashAddress	0	static

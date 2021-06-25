@@ -1,0 +1,2 @@
+S2LP_AUX_UTILS.c:50:10:S2LPManagementComputeXtalFrequency	0	static
+S2LP_AUX_UTILS.c:56:10:S2LPManagementGetXtalFrequency	0	static

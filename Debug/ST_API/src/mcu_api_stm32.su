@@ -1,0 +1,12 @@
+mcu_api_stm32.c:33:6:ST_MCU_API_SetEncryptionPayload	0	static
+mcu_api_stm32.c:38:8:MCU_API_get_device_id_and_payload_encryption_flag	8	static
+mcu_api_stm32.c:47:8:MCU_API_get_initial_pac	8	static
+mcu_api_stm32.c:55:8:MCU_API_malloc	0	static
+mcu_api_stm32.c:76:8:MCU_API_get_nv_mem	8	static
+mcu_api_stm32.c:87:8:MCU_API_set_nv_mem	8	static
+mcu_api_stm32.c:98:8:MCU_API_free	0	static
+mcu_api_stm32.c:106:8:MCU_API_get_voltage_temperature	0	static
+mcu_api_stm32.c:147:8:MCU_API_delay	8	static
+mcu_api_stm32.c:171:8:MCU_API_aes_128_cbc_encrypt	16	static
+mcu_api_stm32.c:188:8:MCU_API_get_version	0	static
+mcu_api_stm32.c:196:8:MCU_API_report_test_result	0	static

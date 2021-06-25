@@ -1,0 +1,3 @@
+ST_Sigfox_Init.c:22:12:St_Sigfox_Open_RCZ	64	static
+ST_Sigfox_Init.c:171:12:ST_Sigfox_Init	24	static
+ST_Sigfox_Init.c:192:6:ST_Sigfox_SetPublicKey	8	static

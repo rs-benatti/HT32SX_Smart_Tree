@@ -1,0 +1,15 @@
+rtc.c:37:6:MX_RTC_Init	40	static
+rtc.c:90:6:HAL_RTC_MspInit	8	static
+rtc.c:110:6:HAL_RTC_MspDeInit	8	static
+rtc.c:131:6:Configure_RTC_Clock	104	static
+rtc.c:159:6:setRtcInUseFlag	0	static
+rtc.c:163:6:setRtcIrqFlag	0	static
+rtc.c:167:6:setRtcInUseForCsFlag	0	static
+rtc.c:171:6:setNextRtcWakeUpFlag	0	static
+rtc.c:175:6:setRtcPrescFlag	0	static
+rtc.c:180:10:getNextRtcWakeUpFlag	0	static
+rtc.c:184:9:getRtcInUseForCsFlag	0	static
+rtc.c:188:9:getRtcIrqFlag	0	static
+rtc.c:192:9:getRtcInUseFlag	0	static
+rtc.c:196:10:getRtcPrescFlag	0	static
+rtc.c:200:21:getRtcHandler	0	static

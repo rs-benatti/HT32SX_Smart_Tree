@@ -1,0 +1,14 @@
+spi.c:63:6:MX_SPI1_Init	8	static
+spi.c:85:6:HAL_SPI_MspInit	56	static
+spi.c:159:6:HAL_SPI_MspDeInit	8	static
+spi.c:190:10:S2LPSpiReadRegisters	40	static,ignoring_inline_asm
+spi.c:218:10:S2LPSpiWriteRegisters	32	static,ignoring_inline_asm
+spi.c:250:10:S2LPSpiCommandStrobes	24	static,ignoring_inline_asm
+spi.c:273:10:S2LPSpiReadFifo	40	static,ignoring_inline_asm
+spi.c:300:10:S2LPSpiWriteFifo	24	static,ignoring_inline_asm
+spi.c:327:13:SdkEvalSpiRawTC	0	static
+spi.c:329:6:S2LPSpiRaw	32	static,ignoring_inline_asm
+spi.c:370:6:HAL_SPI_TxRxCpltCallback	8	static
+spi.c:380:6:ST_MCU_API_SpiRaw	8	static
+spi.c:387:6:S2LPSetSpiInUse	0	static
+spi.c:392:9:S2LPGetSpiInUse	0	static

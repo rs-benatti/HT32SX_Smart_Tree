@@ -1,0 +1,4 @@
+S2LP_AUX_FEM_AUTO.c:45:13:S2LPRadioSetPALeveldBm	0	static
+S2LP_AUX_FEM_AUTO.c:46:13:S2LPRadioSetPALevelMaxIndex	0	static
+S2LP_AUX_FEM_AUTO.c:68:6:FEM_Init	16	static
+S2LP_AUX_FEM_AUTO.c:93:6:FEM_Operation	16	static
